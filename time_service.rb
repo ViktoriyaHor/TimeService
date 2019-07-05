@@ -6,7 +6,7 @@ module TimeService
   class InitialTime
     attr_accessor :time, :min
 
-    def initialize
+    def initialize(time, min)
       @time = time
       @min = min
     end
@@ -51,14 +51,12 @@ module TimeService
 
   # subclass
   class TimeEdit < InitialTime
-    def output_result(time_add, min_add)
-      @time = time_add
-      @min = min_add
+    def output_result
       add_minutes
       printf('%d:%02d %s', @adjusted_hours, @adjusted_minutes, @meridian)
     end
   end
 end
 
-test = TimeService::TimeEdit.new
-test.output_result('11:59 AM', 50)
+test = TimeService::TimeEdit.new('11:59 AM', 50)
+test.output_result
