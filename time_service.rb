@@ -14,7 +14,7 @@ module TimeService
 
     # matching rule with string
     def rule
-      @time_match = @time.strip.match /^(12|11|10|0?\d):([012345]\d)\s+(AM|PM)/
+      @time_match = @time.strip.match(/^(12|11|10|0?\d):([012345]\d)\s+(AM|PM)/)
     end
 
     # throw error on invalid time
@@ -29,18 +29,24 @@ module TimeService
       @str_hours, @str_minutes, @meridian = @time_match.captures
     end
 
-    def add_minutes
-      transform
-      hours = (@meridian == 'AM' ? @str_hours.to_i : @str_hours.to_i + 12)
-      total_minutes = hours * 60 + @str_minutes.to_i + @min
-      total_minutes = total_minutes % (24 * 60) # we only want the minutes that fit within a day
-      @adjusted_hours, @adjusted_minutes = total_minutes.divmod(60)
-      if @adjusted_hours > 12
+    # return meridian
+    def meridian(adjusted_hours)
+      if adjusted_hours > 12
         @adjusted_hours -= 12
         @meridian = 'PM'
       else
         @meridian = 'AM'
       end
+    end
+
+    def add_minutes
+      transform
+      hours = (@meridian == 'AM' ? @str_hours.to_i : @str_hours.to_i + 12)
+      total_minutes = hours * 60 + @str_minutes.to_i + @min
+      # we only want the minutes that fit within a day
+      total_minutes = total_minutes % (24 * 60)
+      @adjusted_hours, @adjusted_minutes = total_minutes.divmod(60)
+      meridian(@adjusted_hours)
     end
   end
 
