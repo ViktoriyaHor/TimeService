@@ -4,12 +4,11 @@
 module TimeService
   # initialize arguments
   class InitialTime
-    attr_accessor :time, :min, :time_match
+    attr_accessor :time, :min
 
     def initialize
       @time = time
       @min = min
-      @time_match = time_match
     end
 
     # matching rule with string
@@ -56,10 +55,10 @@ module TimeService
       @time = time_add
       @min = min_add
       add_minutes
-      '%d:%02d %s' % [@adjusted_hours, @adjusted_minutes, @meridian]
+      printf('%d:%02d %s', @adjusted_hours, @adjusted_minutes, @meridian)
     end
   end
 end
 
 test = TimeService::TimeEdit.new
-p test.output_result('10:59 AM', 50)
+test.output_result('11:59 AM', 50)
